@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://cp4pu8gf0l2cm"]
+
+[ext_resource type="PackedScene" uid="uid://dblqck6fur4vp" path="res://Objects/CardHandler.tscn" id="2_ja1r1"]
+
+[sub_resource type="GDScript" id="GDScript_twepd"]
+script/source = "extends Node2D
+class_name Hand
+
+@onready var curve = %Curve.get_curve()
+var CardSlot = preload(\"res://Objects/CardSlot.tscn\")
+var Handler = preload(\"res://Objects/CardHandler.tscn\")
+var handler
+
+func _init(handler, size = 3) -> void:
+	self.handler = handler
+	for ind in size:
+		handler.slots.add_children(CardSlot.new())
+
+func _ready() -> void:
+	update_slots()
+
+
+func update_slots():
+	var slots = handler.slots.get_children()
+	var size = slots.size()
+	for ind in size:
+		var slot = slots[ind]
+		var dist = curve.get_baked_length() / float(slots.size() + 1 ) * (ind + 1)
+		var trans = curve.sample_baked_with_rotation(dist)
+		slot.set_transform(trans)
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_twepd"]
+size = Vector2(1440, 360)
+
+[sub_resource type="Curve2D" id="Curve2D_3jo1o"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -661.333, 0, -540, 0, 540, 0, 0, -120, 0, 0, 0, 0, 704, 0)
+}
+point_count = 3
+
+[node name="Hand" type="Node2D"]
+script = SubResource("GDScript_twepd")
+
+[node name="CardHandler" parent="." instance=ExtResource("2_ja1r1")]
+script = null
+
+[node name="Slots" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Slot1" type="CollisionShape2D" parent="Slots"]
+position = Vector2(0, -140)
+shape = SubResource("RectangleShape2D_twepd")
+
+[node name="Curve" type="Path2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-20, 0)
+scale = Vector2(0.9375, 1)
+curve = SubResource("Curve2D_3jo1o")

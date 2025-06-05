@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c66knivk0woxg"]
+
+[ext_resource type="Script" uid="uid://dmag5db2eokm8" path="res://Scripts/Game.gd" id="1_adve0"]
+[ext_resource type="PackedScene" uid="uid://b0ft47rsxiccl" path="res://Views/Battle.tscn" id="1_ng73w"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_adve0")
+
+[node name="Background" type="Polygon2D" parent="."]
+z_index = -99
+color = Color(0.327859, 0.763371, 0.349497, 1)
+polygon = PackedVector2Array(0, 0, 1920, 0, 1920, 1080, 0, 1080)
+
+[node name="Battle" parent="." instance=ExtResource("1_ng73w")]

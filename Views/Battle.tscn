@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b0ft47rsxiccl"]
+
+[ext_resource type="PackedScene" uid="uid://dblqck6fur4vp" path="res://Objects/CardHandler.tscn" id="1_21w7s"]
+
+[node name="Battle" type="Node2D"]
+
+[node name="CardHandler" parent="." instance=ExtResource("1_21w7s")]

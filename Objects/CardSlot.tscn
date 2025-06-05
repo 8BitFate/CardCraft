@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://cof3jm44omidi"]
+
+[sub_resource type="GDScript" id="GDScript_lfb2j"]
+script/source = "extends Node2D
+class_name CardSlot
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jwr4w"]
+size = Vector2(240, 400)
+
+[node name="CardSlot" type="Node2D" groups=["CardSlots"]]
+script = SubResource("GDScript_lfb2j")
+
+[node name="Collider" type="Area2D" parent="."]
+
+[node name="Shape" type="CollisionShape2D" parent="Collider"]
+shape = SubResource("RectangleShape2D_jwr4w")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+color = Color(0, 0, 0, 0.266667)
+polygon = PackedVector2Array(-120, -200, 120, -200, 120, 200, -120, 200)

@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyp86gsi73wom"]
+
+[ext_resource type="Script" uid="uid://by8vuvss7a1yu" path="res://Scripts/Hand.gd" id="1_twepd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_twepd"]
+size = Vector2(1440, 360)
+
+[sub_resource type="Curve2D" id="Curve2D_3jo1o"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -661.333, 0, -540, 0, 540, 0, 0, -120, 0, 0, 0, 0, 704, 0)
+}
+point_count = 3
+
+[node name="Hand" type="Node2D"]
+script = ExtResource("1_twepd")
+
+[node name="Slots" type="Area2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Slot1" type="CollisionShape2D" parent="Slots"]
+position = Vector2(0, -140)
+shape = SubResource("RectangleShape2D_twepd")
+
+[node name="Curve" type="Path2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-20, 0)
+scale = Vector2(0.9375, 1)
+curve = SubResource("Curve2D_3jo1o")
+script = ExtResource("1_twepd")
