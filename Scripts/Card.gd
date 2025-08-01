@@ -19,7 +19,7 @@ var handler: CardHandler
 static func instantiate(edit_state = 0):
 	return CardScene.instantiate(edit_state)
 
-func _init(handler = null) -> void:
+func _init(_handler = null) -> void:
 	if handler:
 		self.handler = handler
 		
@@ -69,21 +69,6 @@ func _unhandled_input(event: InputEvent) -> void:
 					handler.multigrab_cancel()
 					select()
 					grab()
-	else:
-		if event.is_action_pressed("Multy Select"):
-			if selected:
-				if handler.multigrab_hit:
-					grab(false)
-				else:
-					handler.multigrab_list.push_back(self)
-		elif selected and event.is_action_pressed("Select"):
-			if handler.multiselect:
-				if handler.multigrab_hit:
-					grab(false)
-				else:
-					handler.multigrab_list.push_back(self)
-			else:
-				deselect()
 	if selected and event.is_action_released("Select"):
 		ungrab()
 		handler.lastevent = null
@@ -99,7 +84,7 @@ func ungrab():
 	# print("ungrabbed " + self.name)
 	grabbed = false
 
-func select(top = true):
+func select(_top = true):
 	# print("selected " + self.name)
 	selected = true
 	border.visible = true
@@ -115,12 +100,12 @@ func deselect():
 	border.visible = false
 	offset = Vector2()
 
-func update_handler(handler: CardHandler = null):
+func update_handler(_handler: CardHandler = null):
 	if not handler:
 		self.handler = find_parent("CardHandler")
 	else:
 		self.handler = handler
 
-func calculate_offset(offset = get_global_mouse_position()):
+func calculate_offset(_offset = get_global_mouse_position()):
 	var end = offset + self.offset
 	end_position = end.clamp(Vector2(), handler.screen_size)

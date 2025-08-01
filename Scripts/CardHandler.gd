@@ -1,7 +1,7 @@
 extends Node2D
 class_name CardHandler
 
-@onready var cards = $Cards
+@onready var cards_node = $Cards
 var screen_size
 var lastevent
 var multiselect = false
@@ -17,10 +17,10 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	for i in 10:
 		var card = Card.instantiate()
-		cards.add_child(card)
+		cards_node.add_child(card)
 		card.update_handler()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	multigrab_hit = false
 	var selected = get_selected()
 	if Shape.STACK == current_shape:
@@ -52,33 +52,33 @@ func cursor_mod():
 
 func stack(cards, mod):
 	print(mod)
-	var len = cards.size()
-	if 1 == len:
+	var size = cards.size()
+	if 1 == size:
 		cards[0].offset = Vector2()
 	else:
-		for ind in len:
+		for ind in size:
 			var card : Card = cards[ind]
-			card.offset = mod / (len - 1) * ind
+			card.offset = mod / (size - 1) * ind
 			card.end_rotation = 0
 			card.calculate_offset(cursor_pos)
 
 func fan(cards, mod):
-	var len = cards.size()
-	for ind in len:
+	var size = cards.size()
+	for ind in size:
 		var card : Card = cards[ind]
 		card.offset = Vector2(
 			Game.CARD_WIDTH * 0.6 * (mod.x + 100) / 100 * ind, 
 			cos(0.1 * PI +  1.8 * PI * float(ind + 1)
-			 / float(len + 1)) * Game.CARD_HEIGHT * (mod.y + 50) / 1000 * len 
+			 / float(size + 1)) * Game.CARD_HEIGHT * (mod.y + 50) / 1000 * size 
 		)
 		card.calculate_offset(cursor_pos)
 		var rot = PI / 3 * (-mod.x + 200) / 200
-		card.end_rotation = (rot / (len + 1) * (ind + 1)) - rot / 2
+		card.end_rotation = (rot / (size + 1) * (ind + 1)) - rot / 2
 		
 
 func tile(cards, mod):
 	var dim : int = ceil(sqrt(cards.size()))
-	var ratio = float(Game.CARD_WIDTH) / float(Game.CARD_HEIGHT)
+	# var ratio = float(Game.CARD_WIDTH) / float(Game.CARD_HEIGHT)
 	for ind in cards.size():
 		var card = cards[ind]
 		card.offset = Vector2(
@@ -107,7 +107,7 @@ func multigrab_cancel ():
 		multigrab_list = []
 
 func get_selected():
-	return cards.get_children().filter(func (card):
+	return cards_node.get_children().filter(func (card):
 		if card is Card:
 			return card.selected
 		else:
