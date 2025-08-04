@@ -163,6 +163,5 @@ vertical_alignment = 1
 autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
 
-[connection signal="input_event" from="Collider" to="." method="_on_collider_input_event"]
 [connection signal="mouse_entered" from="Collider" to="." method="_on_collider_mouse_entered"]
 [connection signal="mouse_exited" from="Collider" to="." method="_on_collider_mouse_exited"]

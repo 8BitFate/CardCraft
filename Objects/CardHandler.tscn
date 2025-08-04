@@ -6,8 +6,6 @@
 [node name="CardHandler" type="Node2D"]
 script = ExtResource("1_ylrfb")
 
-[node name="Shapes" type="Node2D" parent="."]
-
 [node name="Cards" type="Node2D" parent="."]
 
 [node name="Card" parent="Cards" instance=ExtResource("2_yjqht")]
@@ -17,4 +15,4 @@ position = Vector2(560, 320)
 position = Vector2(720, 320)
 
 [node name="Card3" parent="Cards" instance=ExtResource("2_yjqht")]
-position = Vector2(720, 640)
+position = Vector2(200, 320)
