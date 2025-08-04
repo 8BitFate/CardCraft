@@ -10,30 +10,44 @@ static var CardScene = preload("res://Objects/Card.tscn")
 signal mouse_entered
 signal mouse_exited
 
-var is_highlighted = false
-var is_grabbed = false
+enum CardStatus {DEFAULT, HOVERED, GRABBED}
+
+signal status(status: CardStatus)
+
+var global_position_goal : Vector2
+var display_position_goal : Vector2
+var display_scale_goal : Vector2 = Vector2.ONE
 
 static func instantiate():
 	return CardScene.instantiate()
 
 func _ready() -> void:
-	pass
+	connect(status.get_name(), status_handler)
+	global_position_goal = global_position
 
 func _process(delta: float) -> void:
-	z_index = 1
-	display.scale = Vector2.ONE
-	display.position = Vector2()
-	border.visible = false
-	if is_highlighted and !is_grabbed:
-		z_index = 2
-		display.scale = Vector2(Game.UP_SCALE, Game.UP_SCALE)
-		display.position = Vector2(0, Game.CARD_HEIGHT - Game.UP_SCALE * Game.CARD_HEIGHT)
-	if is_grabbed:
-		z_index = 2
-		border.visible = true
+	global_position = lerp(global_position, global_position_goal, 15 * delta)
+	display.position = lerp(display.position, display_position_goal, 30 * delta)
+	display.scale = lerp(display.scale, display_scale_goal, 30 * delta)
 	
 func _on_collider_mouse_entered() -> void:
 	mouse_entered.emit(self)
 
 func _on_collider_mouse_exited() -> void:
 	mouse_exited.emit(self)
+
+func status_handler(status: CardStatus):
+	match status:
+		CardStatus.DEFAULT: 
+			z_index = 1
+			display_scale_goal = Vector2.ONE
+			display_position_goal = Vector2()
+			border.visible = false
+		CardStatus.HOVERED:
+			z_index = 2
+			display_scale_goal = Vector2(Game.UP_SCALE, Game.UP_SCALE)
+			display_position_goal = Vector2(0, Game.CARD_HEIGHT - Game.UP_SCALE * Game.CARD_HEIGHT)
+			border.visible = false
+		CardStatus.GRABBED:
+			border.visible = true
+			z_index = 2

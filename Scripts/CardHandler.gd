@@ -5,7 +5,7 @@ class_name CardHandler
 var screen_size
 var default_scale = Vector2(1, 1)
 
-var hovered_cards = []  # TODO implement a priority que for this
+var hovered_cards : Array[Card] = []  # TODO implement a priority que for this
 
 var grabbed : Card = null
 var offset = Vector2()
@@ -17,19 +17,22 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if hovered_cards and !grabbed:
-		hovered_cards[0].is_highlighted = true
+		hovered_cards[0].status.emit(Card.CardStatus.HOVERED)
 	if grabbed:
-		grabbed.global_position = lerp(grabbed.global_position, calculate_grabbed_position(), 15 * delta)
+		grabbed.global_position_goal = calculate_grabbed_position()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("Grab"):
 		if hovered_cards:
 			grabbed = hovered_cards[0]
 			offset = grabbed.global_position - get_global_mouse_position()
-			grabbed.is_grabbed = true
+			grabbed.status.emit(Card.CardStatus.GRABBED)
 	if event.is_action_released("Grab"):
 		if grabbed:
-			grabbed.is_grabbed = false
+			if hovered_cards.has(grabbed):
+				grabbed.status.emit(Card.CardStatus.HOVERED)
+			else:
+				grabbed.status.emit(Card.CardStatus.DEFAULT)
 			grabbed = null
 			
 
@@ -45,7 +48,8 @@ func mouse_entered_card(card: Card):
 	
 func mouse_exited_card(card: Card):
 	hovered_cards.erase(card)
-	card.is_highlighted = false;
+	if !grabbed:
+		card.status.emit(Card.CardStatus.DEFAULT)
 
 func card_order (a : Node2D, b : Node2D): 
 	if a.z_index == b.z_index:

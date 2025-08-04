@@ -9,10 +9,10 @@ script = ExtResource("1_ylrfb")
 [node name="Cards" type="Node2D" parent="."]
 
 [node name="Card" parent="Cards" instance=ExtResource("2_yjqht")]
-position = Vector2(560, 320)
+position = Vector2(480, 280)
 
 [node name="Card2" parent="Cards" instance=ExtResource("2_yjqht")]
-position = Vector2(720, 320)
+position = Vector2(760, 280)
 
 [node name="Card3" parent="Cards" instance=ExtResource("2_yjqht")]
-position = Vector2(200, 320)
+position = Vector2(200, 280)
