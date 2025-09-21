@@ -1,0 +1,6 @@
+[submodule "addons/godot-git-plugin"]
+	path = addons/godot-git-plugin
+	url = https://github.com/godotengine/godot-git-plugin
+[submodule "addons/onscreen-output"]
+	path = addons/onscreen-output
+	url = git@github.com:Maulve/onscreen-output.git

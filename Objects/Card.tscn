@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://djxcdkbpr7s7b"]
+[gd_scene load_steps=10 format=3 uid="uid://djxcdkbpr7s7b"]
 
 [ext_resource type="Script" uid="uid://13xnsbf10wp1" path="res://Scripts/Card.gd" id="1_xdg4e"]
 
@@ -65,6 +65,9 @@ corner_radius_top_right = 119
 corner_radius_bottom_right = 119
 corner_radius_bottom_left = 119
 corner_detail = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_xdg4e"]
+font_size = 64
 
 [node name="Card" type="Node2D"]
 script = ExtResource("1_xdg4e")
@@ -158,6 +161,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_t5ksk")
 text = "Art"
+label_settings = SubResource("LabelSettings_xdg4e")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
