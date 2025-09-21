@@ -44,7 +44,6 @@ func update_card_position():
 				y_max_offset * pos_curve.sample(float(count - ind - 1) / (count - 1) ))
 			card.set_position_goal(pos)
 			var rot = max_tilt * rot_curve.sample(ind / float(count - 1))
-			Output.print(max_tilt * rot_curve.sample(ind / float(count - 1)))
 			card.global_rotation_goal = rot
 			card.set_index(ind)
 		

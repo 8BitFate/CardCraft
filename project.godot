@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://Scripts/Global.gd"
 Output="*res://addons/onscreen_output/output.tscn"
+Global="*res://Scripts/Global.gd"
 
 [display]
 
@@ -33,10 +33,6 @@ window/stretch/aspect="ignore"
 
 version_control/plugin_name="GitPlugin"
 version_control/autoload_on_startup=true
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/onscreen_output/plugin.cfg")
 
 [input]
 
