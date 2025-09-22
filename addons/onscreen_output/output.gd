@@ -104,7 +104,8 @@ func _setup():
 	
 	visible = !Engine.is_editor_hint() and config.debug_enabled
 
-func print(message: String):
+func print(message):
+	message = str(message)
 	if not config.debug_enabled:
 		printerr("Onscreen Output: Tried to print, but debug is disabled.")
 		return

@@ -1,6 +1,7 @@
 extends Node2D
 class_name Hand
 
+## Editor inputs
 @export var pos_curve: Curve
 @export var rot_curve: Curve
 
@@ -8,10 +9,19 @@ class_name Hand
 @export var y_max_offset := -100
 @export var max_tilt := PI / 10
 
+## TODO usefull variables
 @onready var max_width = Global.viewport_rect.size.x / 2
 @onready var center = Global.viewport_rect.size * Vector2(0.5, 0.95)
 
+## List of cards managed by the hand
 var cards : Array[Card] = []
+
+## Hand configuration data that can be reused
+@onready var hand_conf = {
+	count		= 0,
+	get_pos = func (_ind) : return Vector2.ONE,
+	get_rot = func (ind) : return max_tilt * rot_curve.sample(ind / float(hand_conf.count - 1)),
+}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -21,33 +31,42 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 
-func get_card_hand_position():
-	pass
+## Updates a catds position
+func update_card_position(card : Card):
+	update_hand_conf()
+	var ind = cards.find(card)
+	if ind >= 0:
+		var pos = hand_conf.first_pos + Vector2(
+			ind * (hand_conf.x_offset + Global.CARD_WIDTH),
+			y_max_offset * pos_curve.sample(float(hand_conf.count - ind - 1) / (hand_conf.count - 1) ))
+		card.set_position_goal(pos)
+		card.global_rotation_goal = hand_conf.get_rot
+		card.set_z(ind)
 
-func card_released(card: Card):
-	cards.erase(card)
-	cards.append(card)
-	update_card_position()
+## Update 
+func update_hand():
+	update_hand_conf()
+	for card in cards:
+		update_card_position(card)
 
-func update_card_position():
-	var count = cards.size()
-	var x_offset = default_x_offset
-	var card_width = count * Global.CARD_WIDTH
-	if card_width + ((count - 1) * x_offset) > max_width:
-		x_offset = (max_width - card_width) / (count - 1)
-	var first = center - Vector2(roundf(Global.CARD_WIDTH * count + x_offset * (count - 1)) / 2, 0)
-	for ind in cards.size():
-		var card = cards[ind]
-		if(card):
-			var pos = first + Vector2(
-				ind * (x_offset + Global.CARD_WIDTH),
-				y_max_offset * pos_curve.sample(float(count - ind - 1) / (count - 1) ))
-			card.set_position_goal(pos)
-			var rot = max_tilt * rot_curve.sample(ind / float(count - 1))
-			card.global_rotation_goal = rot
-			card.set_index(ind)
-		
-	
+## calculates variables for card positioning
+func update_hand_conf():
+	if hand_conf.count != cards.size():
+		hand_conf.countt = cards.size()
+		var x_offset = default_x_offset
+		var hand_width = hand_conf.count * Global.CARD_WIDTH
+		if hand_width + ((hand_conf.count - 1) * x_offset) > max_width:
+			x_offset = (max_width - hand_width) / (hand_conf.count - 1)
+		var first_pos = center - Vector2(
+			roundf(Global.CARD_WIDTH * hand_conf.count + x_offset * (hand_conf.count - 1)) / 2,
+			0)
+
+## Add card to hand
 func add_card(card: Card):
 	cards.append(card)
-	card.connect(card.released.get_name(), card_released)
+	update_hand()
+	
+## remove card from hand
+func remove_card(card : Card):
+	cards.erase(card)
+	update_hand()

@@ -1,10 +1,11 @@
 extends Node
 
-# Constants
+## Constants
 const CARD_WIDTH = 120
 const CARD_HEIGHT = 200
 const UP_SCALE = 1.05
 
+## Global variables 
 @onready var viewport_rect = get_viewport().get_visible_rect()
 
 # Called when the node enters the scene tree for the first time.
