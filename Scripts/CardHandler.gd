@@ -21,7 +21,7 @@ var offset = Vector2()
 
 func _ready() -> void:
 	# add cards for testing
-	for i in range(7):
+	for i in range(3):
 		var card = Card.instantiate(self)
 		add_card(card)
 		hand.add_card(card)

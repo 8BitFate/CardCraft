@@ -20,7 +20,7 @@ var cards : Array[Card] = []
 @onready var hand_conf = {
 	count		= 0,
 	get_pos = func (_ind) : return Vector2.ONE,
-	get_rot = func (ind) : return max_tilt * rot_curve.sample(ind / float(hand_conf.count - 1)),
+	get_rot = func (ind) : return max_tilt * rot_curve.sample((ind + 1) / float(hand_conf.count + 1)),
 }
 
 # Called when the node enters the scene tree for the first time.
@@ -36,11 +36,8 @@ func update_card_position(card : Card):
 	update_hand_conf()
 	var ind = cards.find(card)
 	if ind >= 0:
-		var pos = hand_conf.first_pos + Vector2(
-			ind * (hand_conf.x_offset + Global.CARD_WIDTH),
-			y_max_offset * pos_curve.sample(float(hand_conf.count - ind - 1) / (hand_conf.count - 1) ))
-		card.set_position_goal(pos)
-		card.global_rotation_goal = hand_conf.get_rot
+		card.set_position_goal(hand_conf.get_pos.call(ind))
+		card.global_rotation_goal = hand_conf.get_rot.call(ind)
 		card.set_z(ind)
 
 ## Update 
@@ -52,14 +49,24 @@ func update_hand():
 ## calculates variables for card positioning
 func update_hand_conf():
 	if hand_conf.count != cards.size():
-		hand_conf.countt = cards.size()
+		hand_conf.count = cards.size()
 		var x_offset = default_x_offset
-		var hand_width = hand_conf.count * Global.CARD_WIDTH
-		if hand_width + ((hand_conf.count - 1) * x_offset) > max_width:
+		var cards_width = hand_conf.count * Global.CARD_WIDTH
+		var hand_width = cards_width + ((hand_conf.count - 1) * x_offset)
+		if  hand_width > max_width:
 			x_offset = (max_width - hand_width) / (hand_conf.count - 1)
+		var card_with_offset = x_offset + Global.CARD_WIDTH
 		var first_pos = center - Vector2(
-			roundf(Global.CARD_WIDTH * hand_conf.count + x_offset * (hand_conf.count - 1)) / 2,
+			roundf(card_with_offset * hand_conf.count - x_offset) / 2,
 			0)
+		var sample_incr = 1.0 / (hand_conf.count - 1)
+		hand_conf.get_pos = func (ind):
+			if hand_conf.count > 1:
+				return first_pos + Vector2(
+					ind * card_with_offset,
+					y_max_offset * pos_curve.sample(ind * sample_incr))
+			else:
+				return first_pos
 
 ## Add card to hand
 func add_card(card: Card):
