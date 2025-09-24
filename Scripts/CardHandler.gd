@@ -21,17 +21,18 @@ var offset = Vector2()
 
 func _ready() -> void:
 	# add cards for testing
-	for i in range(3):
-		var card = Card.instantiate(self)
+	for ind in range(3):
+		var card = Card.create()
 		add_card(card)
 		hand.add_card(card)
 	hand.update_hand()
 
 ## Sets up card to be handled
 func add_card(card : Card):
+	if card.get_parent() != cards_node:
+		cards_node.add_child(card)
 	card.set_z(cards.size())
 	cards.push_back(card)
-	cards_node.add_child(card)
 	update_z_index()
 
 ## update z indexes after moveing a card
@@ -51,9 +52,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_released("Grab"):
 		if grabbed:
 			if get_top_hovered() == grabbed:
-				grabbed.update_status.emit(Card.CardStatus.HOVERED)
+				pass# grabbed.update_status.emit(Card.CardStatus.HOVERED)
 			else:
-				grabbed.update_status.emit(Card.CardStatus.DEFAULT)
+				pass# grabbed.update_status.emit(Card.CardStatus.DEFAULT)
 			grabbed = null
 
 ## 
@@ -61,7 +62,7 @@ func grab(card : Card):
 	offset = card.global_position - get_global_mouse_position()
 	cards.erase(card)
 	add_card(card)
-	card.update_status.emit(Card.CardStatus.GRABBED) # Tell card about state change
+	pass # card.update_status.emit(Card.CardStatus.GRABBED) # Tell card about state change
 	card.global_rotation_goal = 0
 	grabbed = card
 
@@ -75,20 +76,20 @@ func mouse_entered_card(card: Card):
 	hovered_cards.push_back(card)
 	if !grabbed and (!hovered or hovered.z_fallback < cards.find(card)):
 		if hovered:
-			hovered.update_status.emit(Card.CardStatus.DEFAULT)
+			pass #hovered.update_status.emit(Card.CardStatus.DEFAULT)
 		hovered = card
-		card.update_status.emit(Card.CardStatus.HOVERED)
+		pass # card.update_status.emit(Card.CardStatus.HOVERED)
 
 ## Handle mouse moves off card
 func mouse_exited_card(card: Card):
 	hovered_cards.erase(card)
 	if card == hovered:
 		if card != grabbed:
-			card.update_status.emit(Card.CardStatus.DEFAULT)
+			pass # card.update_status.emit(Card.CardStatus.DEFAULT)
 			hovered = get_top_hovered()
 			if hovered:
-				hovered.update_status.emit(Card.CardStatus.HOVERED)
-
+				pass # hovered.update_status.emit(Card.CardStatus.HOVERED)
+				
 ## Gets the top hovered card
 func get_top_hovered():
 	var res : Card = null

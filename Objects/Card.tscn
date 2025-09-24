@@ -1,6 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://djxcdkbpr7s7b"]
+[gd_scene load_steps=12 format=3 uid="uid://djxcdkbpr7s7b"]
 
-[ext_resource type="Script" uid="uid://13xnsbf10wp1" path="res://Scripts/Card.gd" id="1_xdg4e"]
+[ext_resource type="Script" uid="uid://13xnsbf10wp1" path="res://Scripts/Card/Card.gd" id="1_xdg4e"]
+[ext_resource type="Script" uid="uid://cgul0uejawaoc" path="res://Scripts/Card/CardStateMachine.gd" id="2_eewr4"]
+[ext_resource type="Script" uid="uid://fma7ty2klkek" path="res://Scripts/Card/States/DefaultState.gd" id="3_ys80y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mmmh4"]
 size = Vector2(240, 400)
@@ -166,6 +168,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
+
+[node name="States" type="Node" parent="."]
+script = ExtResource("2_eewr4")
+
+[node name="Default" type="Node" parent="States"]
+script = ExtResource("3_ys80y")
+
+[node name="Hovered" type="Node" parent="States"]
+
+[node name="Grabbed" type="Node" parent="States"]
 
 [connection signal="mouse_entered" from="Collider" to="." method="_on_collider_mouse_entered"]
 [connection signal="mouse_exited" from="Collider" to="." method="_on_collider_mouse_exited"]
