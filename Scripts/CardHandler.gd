@@ -26,3 +26,13 @@ func add_card(card : Card):
 
 func _process(_delta: float) -> void:
 	pass
+	
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("Test"):
+		var card = Card.create()
+		card.handler = self
+		add_card(card)
+		hand.add_card(card)
+		hand.update_hand()
+
+	

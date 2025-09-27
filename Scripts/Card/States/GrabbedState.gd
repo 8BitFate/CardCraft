@@ -11,8 +11,7 @@ func enter():
 	offset = card.global_position - get_viewport().get_mouse_position() 
 
 func exit():
-	var cards = card.handler.cards_node
-	cards.move_child(card, cards.get_child_count() - 1)
+	card.set_order(-1)
 	card.z_index = 0
 	card.border.visible = false
 	

@@ -5,7 +5,7 @@ class_name Hand
 @export var pos_curve: Curve
 @export var rot_curve: Curve
 
-@export var default_x_offset := -10
+@export var default_x_offset := -30
 @export var y_max_offset := -100
 @export var max_tilt := PI / 10
 

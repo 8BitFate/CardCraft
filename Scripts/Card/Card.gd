@@ -15,6 +15,8 @@ static func create():
 @onready var border : Label = $Display/Border
 ## For interaction with other cards
 @onready var csm : CardStateMachine = $StateMachine
+## Collider 
+@onready var collider : CollisionObject2D = $Collider
 
 ## Destination variable for scale
 var scale_goal 		:= Vector2.ONE
@@ -33,6 +35,7 @@ var handler : CardHandler
 ## Set up card state machine for all cards
 func _ready() -> void:
 	csm.init(self)
+	Output.print($Collider/Rectangle.shape.size)
 
 func _process(delta: float) -> void:
 	## update based on state
@@ -40,7 +43,7 @@ func _process(delta: float) -> void:
 	# lerping all destination variables
 	global_scale = lerp(global_scale, scale_goal, 30 * delta)
 	global_rotation = lerp_angle(global_rotation,rotation_goal, 5 * delta)
-	display.position = lerp(display.position, display_position_goal, 15 * delta)
+	display.position = lerp(display.position, display_position_goal, 20 * delta)
 	display.rotation = lerp_angle(display.rotation,display_rotation_goal, 10 * delta)
 	display.scale = lerp(display.scale, display_scale_goal, 30 * delta)
 	
@@ -56,11 +59,19 @@ func _unhandled_input(event: InputEvent):
 ## Keeps the card in bounds (strict makes card completely wisiblw)
 func move_to(goal : Vector2, strict := false):
 	if strict:
-		goal = goal.clamp(Vector2.ZERO + Global.CARD_DIMENSIONS,
-		Global.viewport_rect.size - Global.CARD_DIMENSIONS)
+		goal = goal.clamp(Vector2.ZERO + Global.CARD_DIMENSIONS / 2,
+		Global.viewport_rect.size - Global.CARD_DIMENSIONS / 2)
 	else:
 		goal = goal.clamp(Vector2(), Global.viewport_rect.size)
+	var dif = goal - global_position
+	display.position = display.position - dif
 	global_position = goal
 
+## Rotate card
 func rotation(rot : float):
 	rotation_goal = rot
+
+## Set cards order in tree
+func set_order(ind := -1):
+	var count = handler.cards_node.get_child_count()
+	handler.cards_node.move_child(self, (count - ind) % count)
