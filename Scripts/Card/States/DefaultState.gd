@@ -1,4 +1,3 @@
-class_name DefaultState
 extends CardState
 
 func enter():
@@ -6,6 +5,15 @@ func enter():
 
 func exit():
 	pass
+
+func process(_delta):
+	pass
 	
-func on_input(_event : InputEvent):
+func input(_event : InputEvent):
+	pass
+
+func mouse_entered():
+	csm.next_state.emit(StateName.HOVERED)
+	
+func mouse_exited():
 	pass

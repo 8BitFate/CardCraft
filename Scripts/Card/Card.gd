@@ -10,70 +10,57 @@ static func create():
 	return card
 
 ## Everythig thats wisible goes here
-@onready var display = $Display
+@onready var display : Node2D = $Display
 ## For easy access to highlight
-@onready var border = $Display/Border
+@onready var border : Label = $Display/Border
+## For interaction with other cards
+@onready var csm : CardStateMachine = $StateMachine
 
-## Mouse enters collider
-signal mouse_entered
-## Mouse exits collider
-signal mouse_exited
-
-## Destination variable for position
-var global_position_goal 	:= Vector2.ZERO
 ## Destination variable for scale
-var global_scale_goal 		:= Vector2.ONE
+var scale_goal 		:= Vector2.ONE
 ## Destination variable for roation
-var global_rotation_goal 	:= 0.0
+var rotation_goal 	:= 0.0
 ## Destination variable for grapfics position
 var display_position_goal 	:= Vector2.ZERO
+## Destination variable for graphics rotation
+var display_rotation_goal := 0.0
 ## Destination variable for grapfics scale
 var display_scale_goal 		:= Vector2.ONE
-## Stores z_index when it temporarly changes
-var z_fallback := 0
 
+## Reference to card handler responsible for this
+var handler : CardHandler
+
+## Set up card state machine for all cards
 func _ready() -> void:
-	# connect(update_status.get_name(), status_handler)
-	# for testing
-	name = str(z_fallback)
-	$Display/Art.text = str(z_fallback)
+	csm.init(self)
 
 func _process(delta: float) -> void:
+	## update based on state
+	csm.process(delta)
 	# lerping all destination variables
-	global_position = lerp(global_position, global_position_goal, 15 * delta)
-	global_scale = lerp(global_scale, global_scale_goal, 30 * delta)
-	global_rotation = lerp_angle(global_rotation,global_rotation_goal, 5 * delta)
-	display.position = lerp(display.position, display_position_goal, 30 * delta)
+	global_scale = lerp(global_scale, scale_goal, 30 * delta)
+	global_rotation = lerp_angle(global_rotation,rotation_goal, 5 * delta)
+	display.position = lerp(display.position, display_position_goal, 15 * delta)
+	display.rotation = lerp_angle(display.rotation,display_rotation_goal, 10 * delta)
 	display.scale = lerp(display.scale, display_scale_goal, 30 * delta)
 	
 func _on_collider_mouse_entered() -> void:
-	mouse_entered.emit(self)
+	csm.mouse_entered()
 
 func _on_collider_mouse_exited() -> void:
-	mouse_exited.emit(self)
+	csm.mouse_exited()
 
-## Handles Cards state changes
-#func status_handler(status: CardStatus):
-	#match status:
-		#CardStatus.DEFAULT: 
-			#display_scale_goal = Vector2.ONE
-			#display_position_goal = Vector2()
-			#border.visible = false
-			#z_index = z_fallback
-		#CardStatus.HOVERED:
-			#display_scale_goal = Vector2(Global.UP_SCALE, Global.UP_SCALE)
-			#display_position_goal = Vector2(0, Global.CARD_HEIGHT - Global.UP_SCALE * Global.CARD_HEIGHT)
-			#border.visible = false
-			#z_index = 1000
-		#CardStatus.GRABBED:
-			#border.visible = true
-			#z_index = 1001
+func _unhandled_input(event: InputEvent):
+	csm.input(event)
 
-## Shorthand for setting z_index and its fallback
-func set_z(z: int = 0):
-	z_index = z
-	z_fallback = z
+## Keeps the card in bounds (strict makes card completely wisiblw)
+func move_to(goal : Vector2, strict := false):
+	if strict:
+		goal = goal.clamp(Vector2.ZERO + Global.CARD_DIMENSIONS,
+		Global.viewport_rect.size - Global.CARD_DIMENSIONS)
+	else:
+		goal = goal.clamp(Vector2(), Global.viewport_rect.size)
+	global_position = goal
 
-## Keeps the card in bounds
-func set_position_goal(goal : Vector2):
-	global_position_goal = goal.clamp(Vector2(), Global.viewport_rect.size)
+func rotation(rot : float):
+	rotation_goal = rot

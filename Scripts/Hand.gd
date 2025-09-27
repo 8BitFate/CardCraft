@@ -16,6 +16,9 @@ class_name Hand
 ## List of cards managed by the hand
 var cards : Array[Card] = []
 
+##
+@export var card_hanfler : CardHandler
+
 ## Hand configuration data that can be reused
 @onready var hand_conf = {
 	count		= 0,
@@ -36,9 +39,9 @@ func update_card_position(card : Card):
 	update_hand_conf()
 	var ind = cards.find(card)
 	if ind >= 0:
-		card.set_position_goal(hand_conf.get_pos.call(ind))
-		card.global_rotation_goal = hand_conf.get_rot.call(ind)
-		card.set_z(ind)
+		card.move_to(hand_conf.get_pos.call(ind))
+		card.rotation(hand_conf.get_rot.call(ind))
+		card_hanfler.cards_node.move_child(card, ind)
 
 ## Update 
 func update_hand():

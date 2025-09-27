@@ -10,4 +10,5 @@ script = ExtResource("1_ylrfb")
 
 [node name="Areas" type="Node2D" parent="."]
 
-[node name="Hand" parent="Areas" instance=ExtResource("2_yjqht")]
+[node name="Hand" parent="Areas" node_paths=PackedStringArray("card_hanfler") instance=ExtResource("2_yjqht")]
+card_hanfler = NodePath("../..")

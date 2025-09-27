@@ -3,6 +3,7 @@ extends Node
 ## Constants
 const CARD_WIDTH = 120
 const CARD_HEIGHT = 200
+const CARD_DIMENSIONS = Vector2(CARD_WIDTH, CARD_HEIGHT)
 const UP_SCALE = 1.05
 
 ## Global variables 
