@@ -1,10 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://djxcdkbpr7s7b"]
+[gd_scene load_steps=17 format=3 uid="uid://djxcdkbpr7s7b"]
 
 [ext_resource type="Script" uid="uid://13xnsbf10wp1" path="res://Scripts/Card/Card.gd" id="1_xdg4e"]
 [ext_resource type="Script" uid="uid://cgul0uejawaoc" path="res://Scripts/Card/CardStateMachine.gd" id="2_eewr4"]
 [ext_resource type="Script" uid="uid://fma7ty2klkek" path="res://Scripts/Card/States/DefaultState.gd" id="3_ys80y"]
 [ext_resource type="Script" uid="uid://d0q20xyv4j11c" path="res://Scripts/Card/States/HoveredState.gd" id="4_t5ksk"]
 [ext_resource type="Script" uid="uid://dgysm36ti6c2h" path="res://Scripts/Card/States/GrabbedState.gd" id="5_dubh5"]
+[ext_resource type="Script" uid="uid://bb1jg8k76l8ow" path="res://Scripts/Card/States/HandDefaultState.gd" id="6_gouxs"]
+[ext_resource type="Script" uid="uid://dmvwax8it2o3d" path="res://Scripts/Card/CardInfo.gd" id="6_yah4i"]
+[ext_resource type="Script" uid="uid://cr6ldooweq0rw" path="res://Scripts/Card/States/HandHoveredState.gd" id="7_gouxs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mmmh4"]
 size = Vector2(240, 400)
@@ -171,19 +174,30 @@ vertical_alignment = 1
 autowrap_mode = 3
 metadata/_edit_use_anchors_ = true
 
-[node name="StateMachine" type="Node" parent="."]
+[node name="StateMachine" type="Node2D" parent="."]
 script = ExtResource("2_eewr4")
 
-[node name="Default" type="Node" parent="StateMachine"]
+[node name="Default" type="Node2D" parent="StateMachine"]
 script = ExtResource("3_ys80y")
 
-[node name="Hovered" type="Node" parent="StateMachine"]
+[node name="Hovered" type="Node2D" parent="StateMachine"]
 script = ExtResource("4_t5ksk")
 state_name = 1
 
-[node name="Grabbed" type="Node" parent="StateMachine"]
+[node name="Grabbed" type="Node2D" parent="StateMachine"]
 script = ExtResource("5_dubh5")
 state_name = 2
+
+[node name="HandDefault" type="Node2D" parent="StateMachine"]
+script = ExtResource("6_gouxs")
+state_name = 3
+
+[node name="HandHovered" type="Node2D" parent="StateMachine"]
+script = ExtResource("7_gouxs")
+state_name = 4
+
+[node name="Info" type="Node" parent="."]
+script = ExtResource("6_yah4i")
 
 [connection signal="mouse_entered" from="Collider" to="." method="_on_collider_mouse_entered"]
 [connection signal="mouse_exited" from="Collider" to="." method="_on_collider_mouse_exited"]

@@ -1,11 +1,11 @@
-extends CardState
+extends HandState
 
-func enter(_old_state : CardState):
-	card.display_rotation_goal = -1 * card.rotation_goal
+func enter(old_state : CardState):
+	super(old_state)
 	card.z_index = 1000
 
-func exit(_new_state_name : StateName):
-	card.display_rotation_goal = 0.0
+func exit(new_state_name : StateName):
+	super(new_state_name)
 	card.z_index = 0
 	
 func process(_delta : float):
@@ -15,10 +15,11 @@ func input(event : InputEvent):
 	if event.is_action_pressed("Grab"):
 		csm.next_state.emit(StateName.GRABBED)
 	if event.is_action_pressed("Action"):
-		csm.next_state.emit(StateName.HANDDEFAULT)
+		card.handler.discard(card)
 
 func mouse_entered():
 	pass
 	
 func mouse_exited():
-	csm.next_state.emit(StateName.DEFAULT)
+	csm.next_state.emit(StateName.HANDDEFAULT)
+	

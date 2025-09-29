@@ -1,5 +1,5 @@
 class_name CardState
-extends Node
+extends Node2D
 
 ## reference to card with this state
 var card : Card
@@ -8,7 +8,7 @@ var card : Card
 var csm : CardStateMachine
 
 ## all possible states
-enum StateName {DEFAULT, HOVERED, GRABBED}
+enum StateName {DEFAULT, HOVERED, GRABBED, HANDDEFAULT, HANDHOVERED, MOVING}
 
 ## State name (form enum)
 @export var state_name : StateName
@@ -18,10 +18,10 @@ func init(_card : Card, _csm : CardStateMachine):
 	card = _card
 	csm = _csm
 
-func enter():
+func enter(_old_state : CardState):
 	pass
 
-func exit():
+func exit(_new_state_name : StateName):
 	pass
 	
 func process(_delta : float):

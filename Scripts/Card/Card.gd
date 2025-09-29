@@ -5,8 +5,9 @@ class_name Card
 static var CardScene = preload("res://Objects/Card.tscn")
 
 ## Instantiate a Card scene
-static func create():
+static func create(data : CardInfo):
 	var card : Card = CardScene.instantiate()
+	card.info = data
 	return card
 
 ## Everythig thats wisible goes here
@@ -29,13 +30,16 @@ var display_rotation_goal := 0.0
 ## Destination variable for grapfics scale
 var display_scale_goal 		:= Vector2.ONE
 
+@export var info : CardInfo
+
 ## Reference to card handler responsible for this
 var handler : CardHandler
 
 ## Set up card state machine for all cards
 func _ready() -> void:
 	csm.init(self)
-	Output.print($Collider/Rectangle.shape.size)
+	$Display/Description.text = info.text
+	$Display/Art.text = info.art
 
 func _process(delta: float) -> void:
 	## update based on state
@@ -43,10 +47,10 @@ func _process(delta: float) -> void:
 	# lerping all destination variables
 	global_scale = lerp(global_scale, scale_goal, 30 * delta)
 	global_rotation = lerp_angle(global_rotation,rotation_goal, 5 * delta)
-	display.position = lerp(display.position, display_position_goal, 20 * delta)
-	display.rotation = lerp_angle(display.rotation,display_rotation_goal, 10 * delta)
-	display.scale = lerp(display.scale, display_scale_goal, 30 * delta)
-	
+	display.position = lerp(display.position, display_position_goal, 5 * delta)
+	display.rotation = lerp_angle(display.rotation,display_rotation_goal, 5 * delta)
+	display.scale = lerp(display.scale, display_scale_goal, 5 * delta)
+
 func _on_collider_mouse_entered() -> void:
 	csm.mouse_entered()
 
@@ -56,16 +60,12 @@ func _on_collider_mouse_exited() -> void:
 func _unhandled_input(event: InputEvent):
 	csm.input(event)
 
-## Keeps the card in bounds (strict makes card completely wisiblw)
-func move_to(goal : Vector2, strict := false):
-	if strict:
-		goal = goal.clamp(Vector2.ZERO + Global.CARD_DIMENSIONS / 2,
-		Global.viewport_rect.size - Global.CARD_DIMENSIONS / 2)
-	else:
-		goal = goal.clamp(Vector2(), Global.viewport_rect.size)
-	var dif = goal - global_position
-	display.position = display.position - dif
+## Keeps the card in bounds
+func move_to(goal : Vector2):
+	goal = goal.clamp(Vector2(), Global.viewport_rect.size)
+	var pos = display.global_position 
 	global_position = goal
+	display.global_position = pos
 
 ## Rotate card
 func rotation(rot : float):

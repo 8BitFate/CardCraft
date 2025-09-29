@@ -4,7 +4,6 @@ extends Node
 const CARD_WIDTH = 240
 const CARD_HEIGHT = 400
 const CARD_DIMENSIONS = Vector2(CARD_WIDTH, CARD_HEIGHT)
-const UP_SCALE = 1.05
 
 ## Global variables 
 @onready var viewport_rect = get_viewport().get_visible_rect()

@@ -13,6 +13,8 @@ var card : Card
 
 ## Dict connecting state names to state objects
 var states : Dictionary [CardState.StateName, CardState] = {}
+## Data persisted between states
+var data = {}
 
 func _ready():
 	next_state.connect(update_state)
@@ -39,8 +41,8 @@ func update_state(state_name : CardState.StateName):
 	if state == new_state:
 		return
 	if state:
-		state.exit()
-	new_state.enter()
+		state.exit(state_name)
+	new_state.enter(state)
 	state = new_state
 
 func process(delta : float):

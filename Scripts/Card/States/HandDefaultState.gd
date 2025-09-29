@@ -1,19 +1,19 @@
-extends CardState
+extends HandState
 
 func enter(_old_state : CardState):
-	pass
-
-func exit(_old_state_name : StateName):
-	pass
+	super(_old_state)
+	
+func exit(_new_state_name : StateName):
+	super(_new_state_name)
 
 func process(_delta):
 	pass
-	
+
 func input(_event : InputEvent):
 	pass
 
 func mouse_entered():
-	csm.next_state.emit(StateName.HOVERED)
+	csm.next_state.emit(StateName.HANDHOVERED)
 	
 func mouse_exited():
 	pass
