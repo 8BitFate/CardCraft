@@ -1,61 +1,66 @@
-[gd_scene load_steps=4 format=3 uid="uid://dblqck6fur4vp"]
+[gd_scene load_steps=6 format=3 uid="uid://dblqck6fur4vp"]
 
 [ext_resource type="Script" uid="uid://beaa0l8ldi2qr" path="res://Scripts/CardHandler.gd" id="1_ylrfb"]
+[ext_resource type="PackedScene" uid="uid://djxcdkbpr7s7b" path="res://Objects/Card.tscn" id="2_t5gfc"]
 [ext_resource type="PackedScene" uid="uid://cp4pu8gf0l2cm" path="res://Objects/Hand.tscn" id="2_yjqht"]
+[ext_resource type="Script" uid="uid://b7s4ubmns8e2g" path="res://Scripts/CardSet/CardPile.gd" id="3_7a7nw"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjqht"]
-bg_color = Color(0, 0.529388, 0.125226, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+[sub_resource type="GDScript" id="GDScript_7a7nw"]
+script/source = "class_name DrawPile
+extends CardPile
 
-[node name="CardHandler" type="Node2D"]
+var fallback : CardSet
+
+func _ready() -> void:
+	super()
+
+func set_fallback(pile : CardSet):
+	fallback = pile
+
+func draw():
+	
+	var card = super()
+	if not card:
+		pass
+"
+
+[node name="CardHandler" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_ylrfb")
 
-[node name="Cards" type="Node2D" parent="."]
+[node name="PlayArea" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Areas" type="Node2D" parent="."]
+[node name="Card" parent="PlayArea" instance=ExtResource("2_t5gfc")]
+layout_mode = 0
+offset_left = 346.0
+offset_top = 49.0
+offset_right = 471.0
+offset_bottom = 249.0
 
-[node name="Hand" parent="Areas" instance=ExtResource("2_yjqht")]
-position = Vector2(960, 1080)
+[node name="HandArea" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
 
-[node name="DrawPile" type="Node2D" parent="Areas"]
+[node name="DrawPile" type="MarginContainer" parent="HandArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = SubResource("GDScript_7a7nw")
 
-[node name="Background" type="Label" parent="Areas/DrawPile"]
-z_index = -1
-offset_left = 40.0
-offset_top = 640.0
-offset_right = 280.0
-offset_bottom = 1040.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxFlat_yjqht")
-text = "
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-metadata/_edit_use_anchors_ = true
+[node name="Hand" parent="HandArea" instance=ExtResource("2_yjqht")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 5.0
 
-[node name="DiscardPile" type="Node2D" parent="Areas"]
+[node name="DiscardPile" type="MarginContainer" parent="HandArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_7a7nw")
 
-[node name="Background" type="Label" parent="Areas/DiscardPile"]
-z_index = -1
-offset_left = 1640.0
-offset_top = 640.0
-offset_right = 1880.0
-offset_bottom = 1040.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxFlat_yjqht")
-text = "
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
+[editable path="HandArea/Hand"]

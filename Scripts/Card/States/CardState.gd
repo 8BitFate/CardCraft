@@ -1,5 +1,5 @@
 class_name CardState
-extends Node2D
+extends Node
 
 ## reference to card with this state
 var card : Card

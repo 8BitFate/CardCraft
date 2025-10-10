@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://djxcdkbpr7s7b"]
+[gd_scene load_steps=10 format=3 uid="uid://djxcdkbpr7s7b"]
 
 [ext_resource type="Script" uid="uid://13xnsbf10wp1" path="res://Scripts/Card/Card.gd" id="1_xdg4e"]
 [ext_resource type="Script" uid="uid://cgul0uejawaoc" path="res://Scripts/Card/CardStateMachine.gd" id="2_eewr4"]
+[ext_resource type="Theme" uid="uid://bcgbyjkls1jof" path="res://Themes/CardTheme.tres" id="2_t4kj1"]
 [ext_resource type="Script" uid="uid://fma7ty2klkek" path="res://Scripts/Card/States/DefaultState.gd" id="3_ys80y"]
 [ext_resource type="Script" uid="uid://d0q20xyv4j11c" path="res://Scripts/Card/States/HoveredState.gd" id="4_t5ksk"]
 [ext_resource type="Script" uid="uid://dgysm36ti6c2h" path="res://Scripts/Card/States/GrabbedState.gd" id="5_dubh5"]
@@ -9,195 +10,51 @@
 [ext_resource type="Script" uid="uid://dmvwax8it2o3d" path="res://Scripts/Card/CardInfo.gd" id="6_yah4i"]
 [ext_resource type="Script" uid="uid://cr6ldooweq0rw" path="res://Scripts/Card/States/HandHoveredState.gd" id="7_gouxs"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmmh4"]
-size = Vector2(240, 400)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dubh5"]
-bg_color = Color(0.96, 0.448, 0, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mmmh4"]
-bg_color = Color(0, 0.529388, 0.125226, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xdg4e"]
-bg_color = Color(0, 0, 0, 0.266667)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eewr4"]
-bg_color = Color(0, 0, 0, 0.266667)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 19
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ys80y"]
-bg_color = Color(0, 0, 0, 0.258824)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t5ksk"]
-bg_color = Color(0.533333, 0.533333, 0.533333, 0.533333)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 119
-corner_radius_top_right = 119
-corner_radius_bottom_right = 119
-corner_radius_bottom_left = 119
-corner_detail = 20
-
-[sub_resource type="LabelSettings" id="LabelSettings_xdg4e"]
-font_size = 64
-
-[node name="Card" type="Node2D"]
+[node name="Card" type="Control"]
+custom_minimum_size = Vector2(125, 200)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 125.0
+offset_bottom = 200.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_xdg4e")
 
-[node name="Collider" type="Area2D" parent="."]
+[node name="Display" type="AspectRatioContainer" parent="."]
+custom_minimum_size = Vector2(125, 200)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 0.625
 
-[node name="Rectangle" type="CollisionShape2D" parent="Collider"]
-shape = SubResource("RectangleShape2D_mmmh4")
+[node name="Background" type="Panel" parent="Display"]
+layout_mode = 2
+theme = ExtResource("2_t4kj1")
 
-[node name="Display" type="Node2D" parent="."]
-
-[node name="Border" type="Label" parent="Display"]
-visible = false
-offset_left = -123.0
-offset_top = -203.0
-offset_right = 123.0
-offset_bottom = 203.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxFlat_dubh5")
-text = "
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Background" type="Label" parent="Display"]
-offset_left = -120.0
-offset_top = -200.0
-offset_right = 120.0
-offset_bottom = 200.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxFlat_mmmh4")
-text = "
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Name" type="Label" parent="Display"]
-offset_left = -120.0
-offset_top = -200.0
-offset_right = 120.0
-offset_bottom = -160.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxFlat_xdg4e")
-text = "Name"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-clip_text = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Cost" type="Label" parent="Display"]
-offset_left = -120.0
-offset_top = -200.0
-offset_right = -80.0
-offset_bottom = -160.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = SubResource("StyleBoxFlat_eewr4")
-text = "9"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-clip_text = true
-metadata/_edit_use_anchors_ = true
-
-[node name="Description" type="Label" parent="Display"]
-offset_left = -120.0
-offset_top = 80.0
-offset_right = 120.0
-offset_bottom = 200.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxFlat_ys80y")
-text = "Description"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-clip_text = true
-
-[node name="Art" type="Label" parent="Display"]
-offset_left = -120.0
-offset_top = -160.0
-offset_right = 120.0
-offset_bottom = 80.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("StyleBoxFlat_t5ksk")
-text = "Art"
-label_settings = SubResource("LabelSettings_xdg4e")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-metadata/_edit_use_anchors_ = true
-
-[node name="StateMachine" type="Node2D" parent="."]
+[node name="StateMachine" type="Node" parent="."]
 script = ExtResource("2_eewr4")
 
-[node name="Default" type="Node2D" parent="StateMachine"]
+[node name="Default" type="Node" parent="StateMachine"]
 script = ExtResource("3_ys80y")
 
-[node name="Hovered" type="Node2D" parent="StateMachine"]
+[node name="Hovered" type="Node" parent="StateMachine"]
 script = ExtResource("4_t5ksk")
 state_name = 1
 
-[node name="Grabbed" type="Node2D" parent="StateMachine"]
+[node name="Grabbed" type="Node" parent="StateMachine"]
 script = ExtResource("5_dubh5")
 state_name = 2
 
-[node name="HandDefault" type="Node2D" parent="StateMachine"]
+[node name="HandDefault" type="Node" parent="StateMachine"]
 script = ExtResource("6_gouxs")
 state_name = 3
 
-[node name="HandHovered" type="Node2D" parent="StateMachine"]
+[node name="HandHovered" type="Node" parent="StateMachine"]
 script = ExtResource("7_gouxs")
 state_name = 4
 
 [node name="Info" type="Node" parent="."]
 script = ExtResource("6_yah4i")
-
-[connection signal="mouse_entered" from="Collider" to="." method="_on_collider_mouse_entered"]
-[connection signal="mouse_exited" from="Collider" to="." method="_on_collider_mouse_exited"]

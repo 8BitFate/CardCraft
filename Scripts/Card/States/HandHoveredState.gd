@@ -3,10 +3,12 @@ extends HandState
 func enter(old_state : CardState):
 	super(old_state)
 	card.z_index = 1000
+	# hand.hover(card)
 
 func exit(new_state_name : StateName):
 	super(new_state_name)
 	card.z_index = 0
+	# hand.unhover()
 	
 func process(_delta : float):
 	pass

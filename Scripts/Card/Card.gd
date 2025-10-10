@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 class_name Card
 
 ## preload for instantiate
@@ -11,13 +11,9 @@ static func create(data : CardInfo):
 	return card
 
 ## Everythig thats wisible goes here
-@onready var display : Node2D = $Display
-## For easy access to highlight
-@onready var border : Label = $Display/Border
+@onready var display : Control = $Display
 ## For interaction with other cards
 @onready var csm : CardStateMachine = $StateMachine
-## Collider 
-@onready var collider : CollisionObject2D = $Collider
 
 ## Destination variable for scale
 var scale_goal 		:= Vector2.ONE
@@ -32,24 +28,22 @@ var display_scale_goal 		:= Vector2.ONE
 
 @export var info : CardInfo
 
-## Reference to card handler responsible for this
-var handler : CardHandler
-
 ## Set up card state machine for all cards
 func _ready() -> void:
 	csm.init(self)
-	$Display/Description.text = info.text
-	$Display/Art.text = info.art
+	#display.get_node("Description").text = info.text
+	#display.get_node("Art").text = info.art
+	resize()
 
 func _process(delta: float) -> void:
 	## update based on state
 	csm.process(delta)
 	# lerping all destination variables
-	global_scale = lerp(global_scale, scale_goal, 30 * delta)
-	global_rotation = lerp_angle(global_rotation,rotation_goal, 5 * delta)
-	display.position = lerp(display.position, display_position_goal, 5 * delta)
-	display.rotation = lerp_angle(display.rotation,display_rotation_goal, 5 * delta)
-	display.scale = lerp(display.scale, display_scale_goal, 5 * delta)
+	# global_scale = lerp(global_scale, scale_goal, 30 * delta)
+	# global_rotation = lerp_angle(global_rotation,rotation_goal, 5 * delta)
+	#display.position = lerp(display.position, display_position_goal, 5 * delta)
+	#display.rotation = lerp_angle(display.rotation,display_rotation_goal, 5 * delta)
+	#display.scale = lerp(display.scale, display_scale_goal, 5 * delta)
 
 func _on_collider_mouse_entered() -> void:
 	csm.mouse_entered()
@@ -60,9 +54,14 @@ func _on_collider_mouse_exited() -> void:
 func _unhandled_input(event: InputEvent):
 	csm.input(event)
 
+func resize():
+	var width = G.card_dimensions.x
+	size.x = width
+	size.y = width / 0.625
+
 ## Keeps the card in bounds
 func move_to(goal : Vector2):
-	goal = goal.clamp(Vector2(), Global.viewport_rect.size)
+	goal = goal.clamp(Vector2(), G.viewport_rect.size)
 	var pos = display.global_position 
 	global_position = goal
 	display.global_position = pos
@@ -72,6 +71,5 @@ func rotation(rot : float):
 	rotation_goal = rot
 
 ## Set cards order in tree
-func set_order(ind := -1):
-	var count = handler.cards_node.get_child_count()
-	handler.cards_node.move_child(self, (count - ind) % count)
+func set_order(ind : int):
+	z_index = ind

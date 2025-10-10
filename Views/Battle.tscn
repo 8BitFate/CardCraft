@@ -1,7 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://b0ft47rsxiccl"]
+[gd_scene load_steps=5 format=3 uid="uid://b0ft47rsxiccl"]
 
 [ext_resource type="PackedScene" uid="uid://dblqck6fur4vp" path="res://Objects/CardHandler.tscn" id="1_21w7s"]
+[ext_resource type="Script" uid="uid://de8327pxeqp5f" path="res://Scripts/Battle.gd" id="1_n8fp2"]
+[ext_resource type="Script" uid="uid://ciw80xm45f07r" path="res://Scripts/Action/ActionHandler.gd" id="2_jpyn7"]
+[ext_resource type="Script" uid="uid://bhn416b0s4asp" path="res://Scripts/RNG.gd" id="3_n8fp2"]
 
-[node name="Battle" type="Node2D"]
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_n8fp2")
 
 [node name="CardHandler" parent="." instance=ExtResource("1_21w7s")]
+layout_mode = 1
+
+[node name="ActionHandler" type="Node" parent="."]
+script = ExtResource("2_jpyn7")
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("3_n8fp2")
+
+[editable path="CardHandler"]
+[editable path="CardHandler/HandArea/Hand"]

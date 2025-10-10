@@ -8,7 +8,7 @@ func enter(_old_state : CardState):
 	card.rotation(0)
 	card.z_index = 1001
 	card.border.visible = true
-	offset = card.global_position - get_global_mouse_position() 
+	# offset = card.global_position - get_global_mouse_position() 
 	Output.print(offset)
 
 func exit(_new_state_name : StateName):
